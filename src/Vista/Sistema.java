@@ -107,7 +107,7 @@ public class Sistema extends javax.swing.JFrame {
     private BigDecimal totalTransferencia = BigDecimal.ZERO;
     private BigDecimal totalCredito = BigDecimal.ZERO;
 
-    String entrada;
+   
     String usuarioLog;
     
     public Sistema() {
