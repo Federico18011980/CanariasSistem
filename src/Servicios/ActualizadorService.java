@@ -1,0 +1,47 @@
+package Servicios;
+
+import java.awt.Desktop;
+import java.awt.HeadlessException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import javax.swing.JOptionPane;
+
+public class ActualizadorService {
+
+    // Versión actual del programa (la que tienes tú ahora)
+    private final String VERSION_ACTUAL = "1.0";
+    
+    // URL del archivo version.txt (Reemplaza con tu link Raw de GitHub)
+    private final String URL_VERSION = "https://gist.githubusercontent.com/federodriguez18011980-lab/a095d16849223f94a9417fcd6b1a86c5/raw/eda520f7168fa07c0fadc6f9819d646d6b94e5cb/version.txt";
+
+    public void verificarVersion() {
+    new Thread(() -> {
+        try {
+            URL url = new URL(URL_VERSION);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            String versionRemota = reader.readLine().trim();
+            reader.close();
+
+            if (!VERSION_ACTUAL.equals(versionRemota)) {
+                // Personalizamos el panel para que tenga botones de Sí/No
+                int respuesta = JOptionPane.showConfirmDialog(null, 
+                    "¡Nueva versión disponible (" + versionRemota + ")!\n" +
+                    "¿Desea descargar la actualización ahora?", 
+                    "Actualización del Sistema", 
+                    JOptionPane.YES_NO_OPTION);
+
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    // URL donde subiste el nuevo instalador (Ej: Dropbox, Drive, o tu Servidor)
+                    String urlDescarga = "https://tu-sitio.com/descargas/InstaladorCanarias.exe";
+                    Desktop.getDesktop().browse(new java.net.URI(urlDescarga));
+                    System.exit(0); // Cerramos el sistema para que puedan instalar
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }).start();
+}
+}
