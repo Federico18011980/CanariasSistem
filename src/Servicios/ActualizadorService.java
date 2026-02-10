@@ -5,6 +5,7 @@ import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.net.URL;
 import javax.swing.JOptionPane;
 
@@ -34,12 +35,12 @@ public class ActualizadorService {
 
                 if (respuesta == JOptionPane.YES_OPTION) {
                     // URL donde subiste el nuevo instalador (Ej: Dropbox, Drive, o tu Servidor)
-                    String urlDescarga = "https://tu-sitio.com/descargas/InstaladorCanarias.exe";
+                    String urlDescarga = "https://github.com/Federico18011980/CanariasSistem/releases/download/V1.1/CanariasSystem_Setup_v1.1.exe";
                     Desktop.getDesktop().browse(new java.net.URI(urlDescarga));
                     System.exit(0); // Cerramos el sistema para que puedan instalar
                 }
             }
-        } catch (Exception e) {
+        } catch (HeadlessException | IOException | URISyntaxException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }).start();
