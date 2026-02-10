@@ -106,7 +106,7 @@ public class Sistema extends javax.swing.JFrame {
     private BigDecimal totalEfectivo = BigDecimal.ZERO;
     private BigDecimal totalTransferencia = BigDecimal.ZERO;
     private BigDecimal totalCredito = BigDecimal.ZERO;
-
+    private ConexionMysql cn = new ConexionMysql();
    
     String usuarioLog;
     
@@ -131,8 +131,23 @@ public class Sistema extends javax.swing.JFrame {
                 realizarBackupAutomatico();
             }
         });
+        
+        
+        
+        // En el constructor de Sistema.java
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                int pregunta = JOptionPane.showConfirmDialog(null,
+                        "¿Desea cerrar el sistema?\nSe realizará un backup de seguridad.",
+                        "Confirmar Salida", JOptionPane.YES_NO_OPTION);
 
-
+                if (pregunta == JOptionPane.YES_OPTION) {
+                    salirDelSistema(); // <--- Llamamos al método maestro
+                }
+            }
+        });
         
         txtBuscarProducto.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -204,7 +219,7 @@ public class Sistema extends javax.swing.JFrame {
         txtEfectivoCaja.setText(totalCaja);
         //btnCategorias.setEnabled(false);
         btnExportar.setEnabled(false);
-       usuarioLog = priv.getNombre();
+        usuarioLog = priv.getNombre();
         ListarConfig();
         
         if(priv.getRol().equals("Vendedor")){
@@ -227,7 +242,7 @@ public class Sistema extends javax.swing.JFrame {
         }else{jLabelVendedor.setText(priv.getNombre());
             
         }
-        new Servicios.ActualizadorService().verificarVersion();
+        new Servicios.ActualizadorService(this).verificarVersion();
     }
     
     public void ListarCliente() {
@@ -5349,5 +5364,64 @@ public class Sistema extends javax.swing.JFrame {
         System.err.println("Error en backup automático: " + e.getMessage());
     }
 }
+    
+    
+    private void confirmarSalidaSegura() {
+        int pregunta = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea cerrar el sistema?\nSe realizará un backup automático.",
+                "Confirmar Salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (pregunta == JOptionPane.YES_OPTION) {
+            // 1. Crear carpeta si no existe
+            File folder = new File("backups_automaticos");
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            // 2. Ejecutar backup (Síncrono)
+            BackupService bs = new BackupService();
+            bs.ejecutarRespaldo(folder.getAbsolutePath());
+
+            // 3. Cerrar el programa definitivamente
+            System.exit(0);
+        }
+    }
+    
+    public void salirDelSistema() {
+        System.out.println("Iniciando proceso de salida controlado...");
+
+        // 1. Ejecutar el backup
+        try {
+            File folder = new File("backups_automaticos");
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            Servicios.BackupService bs = new Servicios.BackupService();
+            // Usamos el método que devuelve boolean para confirmar en consola
+            boolean ok = bs.ejecutarRespaldo(folder.getAbsolutePath());
+            if (ok) {
+                System.out.println("Backup de seguridad completado.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error en backup de salida: " + e.getMessage());
+        }
+
+        // 2. Cerrar la conexión a H2 explícitamente
+        // Esto es vital para que el archivo .mv.db se cierre bien
+        try {
+            // cn es tu objeto de Conexion. Asegúrate que cerrar() o close() funcione.
+            if (cn.conectar() != null && !cn.conectar().isClosed()) {
+                cn.conectar().close();
+                System.out.println("Conexión a H2 cerrada.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cerrar conexión: " + e.getMessage());
+        }
+
+        // 3. Fin del proceso
+        System.exit(0);
+    }
+    
 
 }

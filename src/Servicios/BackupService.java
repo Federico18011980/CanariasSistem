@@ -11,8 +11,9 @@ import javax.swing.JOptionPane;
 
 public class BackupService {
 
-   private final ConexionMysql cn = new ConexionMysql();
+    private ConexionMysql cn = new ConexionMysql();
 
+    // Método para cuando el usuario elige dónde guardar (Manual)
     public void generarBackupManual() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Seleccione carpeta para guardar el respaldo");
@@ -20,32 +21,35 @@ public class BackupService {
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             String rutaBase = chooser.getSelectedFile().getAbsolutePath();
-            ejecutarRespaldo(rutaBase);
+            // Ejecutamos y avisamos
+            if (ejecutarRespaldo(rutaBase)) {
+                JOptionPane.showMessageDialog(null, "✅ Respaldo manual creado con éxito.");
+            }
         }
     }
 
-    public void ejecutarRespaldo(String rutaCarpeta) {
-        // Nombre del archivo con fecha y hora: backup_2024-05-20_15-30.sql
-        String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm"));
+    // EL MOTOR: Ahora devuelve un boolean para saber si terminó bien
+    public boolean ejecutarRespaldo(String rutaCarpeta) {
+        String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
         String nombreArchivo = "Respaldo_Canarias_" + fecha + ".sql";
-        String rutaCompleta = rutaCarpeta + File.separator + nombreArchivo;
+        
+        // IMPORTANTE: H2 necesita rutas con barras hacia adelante (/) incluso en Windows
+        String rutaCompleta = new File(rutaCarpeta, nombreArchivo).getAbsolutePath().replace("\\", "/");
 
-        // Sentencia mágica de H2 para clonar la base de datos a texto SQL
+        // Sentencia SCRIPT de H2
         String sql = "SCRIPT TO '" + rutaCompleta + "'";
 
+        // Usamos una nueva conexión solo para el backup para no interferir con la principal
         try (Connection con = cn.conectar(); 
              Statement st = con.createStatement()) {
             
             st.execute(sql);
-            
-            JOptionPane.showMessageDialog(null, 
-                "✅ Respaldo creado con éxito en:\n" + nombreArchivo, 
-                "Copia de Seguridad", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("Backup finalizado en: " + rutaCompleta);
+            return true;
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, 
-                "❌ Error al crear el respaldo: " + e.getMessage(), 
-                "Error de Seguridad", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error crítico en backup: " + e.getMessage());
+            return false;
         }
     }
 }
