@@ -3758,20 +3758,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarProductoActionPerformed
 
     private void txtBuscarProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProductoKeyPressed
-        // TODO add your handling code here:
-//        txtBuscarProducto.getDocument().addDocumentListener(new DocumentListener() {
-//    public void insertUpdate(DocumentEvent e) {
-//        filtrarTabla(txtBuscarProducto.getText());
-//    }
-//
-//    public void removeUpdate(DocumentEvent e) {
-//        filtrarTabla(txtBuscarProducto.getText());
-//    }
-//
-//    public void changedUpdate(DocumentEvent e) {
-//        filtrarTabla(txtBuscarProducto.getText());
-//    }
-//});
+   
 
     }//GEN-LAST:event_txtBuscarProductoKeyPressed
 
@@ -5251,9 +5238,10 @@ public class Sistema extends javax.swing.JFrame {
                     p.getCategoriaNombre(),
                     p.getTalleNombre(),
                     p.getColorNombre(),
+                    p.getPrecioCompra(),
                     p.getPrecio(),
-                    p.getProveedor(),
-                    p.getPrecioCompra()
+                    p.getProveedor()
+                    
                 });
             }
         }
