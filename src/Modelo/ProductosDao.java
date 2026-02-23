@@ -17,7 +17,8 @@ public class ProductosDao {
     ConexionMysql cn = new ConexionMysql();
 
     public boolean RegistrarProductos(Productos pro) {
-        String sql = "INSERT INTO productos (codigo, descripcion, precio, stock, proveedor, id_categoria, id_talle, id_color) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO productos (codigo, descripcion, precio, stock, proveedor,"
+                + " id_categoria, id_talle, id_color, precio_compra) VALUES (?,?,?,?,?,?,?,?,?)";
         
         // VALIDACIÓN ANTIDUPLICADOS EXTRA
         String sqlCheck = "SELECT COUNT(*) FROM productos WHERE codigo = ?";
@@ -46,6 +47,7 @@ public class ProductosDao {
             ps.setInt(6, pro.getIdCategoria());
             ps.setInt(7, pro.getIdTalle());
             ps.setInt(8, pro.getIdColor());
+            ps.setBigDecimal(9, pro.getPrecioCompra());
 
             ps.execute();
             return true;
@@ -61,7 +63,7 @@ public class ProductosDao {
 
         String sql = "SELECT p.id, p.codigo, p.descripcion, p.stock, p.precio, "
                 + "c.nombre AS categoria, t.nombre AS talle, co.nombre AS color, "
-                + "p.proveedor "
+                + "p.proveedor, p.precio_compra "
                 + "FROM productos p "
                 + "LEFT JOIN categorias c ON p.id_categoria = c.id "
                 + "LEFT JOIN talles t ON p.id_talle = t.id "
@@ -88,6 +90,7 @@ public class ProductosDao {
                 pro.setColorNombre(rs.getString("color"));
 
                 pro.setProveedor(rs.getString("proveedor"));
+                pro.setPrecioCompra(rs.getBigDecimal("precio_compra"));
 
                 lista.add(pro);
             }
@@ -118,6 +121,7 @@ public class ProductosDao {
                 pro.setIdCategoria(rs.getInt("id_categoria"));
                 pro.setIdCategoria(rs.getInt("id_talle"));
                 pro.setIdCategoria(rs.getInt("id_color"));
+                pro.setPrecioCompra(rs.getBigDecimal("precio_compra"));
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -138,7 +142,8 @@ public class ProductosDao {
             ps.setString(5, pro.getCodigo());
             ps.setInt(6, pro.getIdCategoria());
             ps.setInt(7, pro.getIdTalle());
-            ps.setInt(6, pro.getIdColor());
+            ps.setInt(8, pro.getIdColor());
+            ps.setBigDecimal(9, pro.getPrecioCompra());
 
             ps.execute();
             return true;
@@ -238,6 +243,7 @@ public class ProductosDao {
                 p.setIdCategoria(rs.getInt("id_categoria"));
                 p.setIdCategoria(rs.getInt("id_talle"));
                 p.setIdCategoria(rs.getInt("id_color"));
+                p.setPrecioCompra(rs.getBigDecimal("precio_compra"));
                 lista.add(p);
             }
 
@@ -266,7 +272,7 @@ public class ProductosDao {
     }
 
     public boolean ModificarProductos(Productos pro) {
-        String sql = "UPDATE productos SET codigo=?, descripcion=?, proveedor=?, stock=?, precio=?, id_categoria=?, id_talle=?, id_color=? WHERE id=?";
+        String sql = "UPDATE productos SET codigo=?, descripcion=?, proveedor=?, stock=?, precio=?, id_categoria=?, id_talle=?, id_color=?, precio_compra WHERE id=?";
 
         try {
             con = cn.conectar();
@@ -280,7 +286,8 @@ public class ProductosDao {
             ps.setInt(6, pro.getIdCategoria());
             ps.setInt(7, pro.getIdTalle());
             ps.setInt(8, pro.getIdColor());
-            ps.setInt(9, pro.getId());
+            ps.setBigDecimal(9, pro.getPrecioCompra());
+            
             ps.execute();
             return true;
 
@@ -375,6 +382,7 @@ public class ProductosDao {
                 pro.setIdCategoria(rs.getInt("id_categoria"));
                 pro.setIdTalle(rs.getInt("id_talle"));
                 pro.setIdColor(rs.getInt("id_color"));
+                pro.setPrecioCompra(rs.getBigDecimal("precio_compra"));
             }
 
         } catch (SQLException e) {

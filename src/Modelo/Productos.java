@@ -7,6 +7,7 @@ public class Productos {
     private int id;
     private String codigo;
     private String descripcion;
+    private BigDecimal precioCompra; 
     private BigDecimal precio;
     private BigDecimal stock;
     private String proveedor;
@@ -31,7 +32,7 @@ public class Productos {
 
     public Productos(int id, String codigo, String descripcion, BigDecimal precio,
                      BigDecimal stock, String proveedor, int categoria, int talle,
-                     int color, String catNombre, String talleNombre, String colorNombre ) {
+                     int color, String catNombre, String talleNombre, String colorNombre, BigDecimal precioCompra ) {
         
         this.id = id;
         this.codigo = codigo;
@@ -45,7 +46,7 @@ public class Productos {
         this.categoriaNombre = catNombre;
         this.talleNombre = talleNombre;
         this.colorNombre = colorNombre;
-       // this.codigoBarras = codigoBarras;
+        this.precioCompra = precioCompra;
     }
     
     public String getCategoriaNombre() {
@@ -120,7 +121,7 @@ public class Productos {
         this.proveedor = proveedor;
     }
     
-    /*Desde aca en adelante las categorias, talles, colores y cod de barra*/
+    /*Desde aca en adelante las categorias, talles, colores y precioCompra*/
     
     public int getIdCategoria() {
         return idCategoria;
@@ -146,12 +147,13 @@ public class Productos {
         this.idColor = idColor;
     }
 
-//    public String getCodigoBarras() {
-//        return codigoBarras;
-//    }
-//
-//    public void setCodigoBarras(String codigoBarras) {
-//        this.codigoBarras = codigoBarras; 
-//    }
+    public BigDecimal getPrecioCompra() {
+        return precioCompra;
+    }
 
+    public void setPrecioCompra(BigDecimal precioCompra) {
+        this.precioCompra = precioCompra;
+    }
+
+    
 }
