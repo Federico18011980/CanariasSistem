@@ -302,9 +302,9 @@ public class Sistema extends javax.swing.JFrame {
         obj[4] = ListaProd.get(i).getCategoriaNombre();  // ← nombre, no ID
         obj[5] = ListaProd.get(i).getTalleNombre();      // ← nombre
         obj[6] = ListaProd.get(i).getColorNombre();      // ← nombre
-        obj[7] = ListaProd.get(i).getPrecio();
-        obj[8] = ListaProd.get(i).getProveedor();
-        obj[9] = ListaProd.get(i).getPrecioCompra();
+        obj[7] = ListaProd.get(i).getPrecioCompra();
+        obj[8] = ListaProd.get(i).getPrecio();
+        obj[9] = ListaProd.get(i).getProveedor();
 
         modelo.addRow(obj);
     }
@@ -1235,7 +1235,7 @@ public class Sistema extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id", "CODIGO", "DESCRIPCION", "STOCK", "CATEGORIA", "TALLE", "COLOR", "PRECIO", "PROVEEDOR", "COMPRA"
+                "id", "CODIGO", "DESCRIPCION", "STOCK", "CATEGORIA", "TALLE", "COLOR", "COMPRA", "PRECIO", "PROVEEDOR"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -1261,7 +1261,8 @@ public class Sistema extends javax.swing.JFrame {
             tablaProductos.getColumnModel().getColumn(5).setPreferredWidth(5);
             tablaProductos.getColumnModel().getColumn(6).setPreferredWidth(10);
             tablaProductos.getColumnModel().getColumn(7).setPreferredWidth(20);
-            tablaProductos.getColumnModel().getColumn(8).setPreferredWidth(30);
+            tablaProductos.getColumnModel().getColumn(8).setPreferredWidth(20);
+            tablaProductos.getColumnModel().getColumn(9).setPreferredWidth(30);
         }
 
         jLabel44.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
