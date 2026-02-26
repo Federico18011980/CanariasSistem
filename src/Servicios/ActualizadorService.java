@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 public class ActualizadorService {
 
     // Versión actual del programa (la que tienes tú ahora)
-    private final String VERSION_ACTUAL = "1.0";
+    private final String VERSION_ACTUAL = "1.1";
     
     // 1. Creamos una variable para guardar la referencia
     private Vista.Sistema vistaPrincipal;

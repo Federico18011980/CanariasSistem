@@ -271,31 +271,36 @@ public class ProductosDao {
         }
     }
 
-    public boolean ModificarProductos(Productos pro) {
-        String sql = "UPDATE productos SET codigo=?, descripcion=?, proveedor=?, stock=?, precio=?, id_categoria=?, id_talle=?, id_color=?, precio_compra WHERE id=?";
+public boolean ModificarProductos(Productos pro) {
+    // La sentencia tiene 10 "?"
+    String sql = "UPDATE productos SET codigo=?, descripcion=?, proveedor=?, stock=?, precio=?, id_categoria=?, id_talle=?, id_color=?, precio_compra=? WHERE id=?";
 
-        try {
-            con = cn.conectar();
-            ps = con.prepareStatement(sql);
+    try {
+        con = cn.conectar();
+        ps = con.prepareStatement(sql);
 
-            ps.setString(1, pro.getCodigo());
-            ps.setString(2, pro.getDescripcion());
-            ps.setString(3, pro.getProveedor());
-            ps.setBigDecimal(4, pro.getStock());
-            ps.setBigDecimal(5, pro.getPrecio());
-            ps.setInt(6, pro.getIdCategoria());
-            ps.setInt(7, pro.getIdTalle());
-            ps.setInt(8, pro.getIdColor());
-            ps.setBigDecimal(9, pro.getPrecioCompra());
-            
-            ps.execute();
-            return true;
+        ps.setString(1, pro.getCodigo());
+        ps.setString(2, pro.getDescripcion());
+        ps.setString(3, pro.getProveedor());
+        ps.setBigDecimal(4, pro.getStock());
+        ps.setBigDecimal(5, pro.getPrecio());
+        ps.setInt(6, pro.getIdCategoria());
+        ps.setInt(7, pro.getIdTalle());
+        ps.setInt(8, pro.getIdColor());
+        ps.setBigDecimal(9, pro.getPrecioCompra());
+        
+        
+        ps.setInt(10, pro.getId()); 
+        // ----------------------------------------------------
 
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-            return false;
-        }
+        ps.execute();
+        return true;
+
+    } catch (SQLException e) {
+        System.out.println(e.toString());
+        return false;
     }
+}
 
     public boolean actualizarPrecioPorDolar(BigDecimal valorDolar) {
         String sql = "UPDATE productos SET precioxdolar = precio * ?";

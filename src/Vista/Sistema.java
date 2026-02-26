@@ -57,6 +57,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -3015,9 +3016,10 @@ public class Sistema extends javax.swing.JFrame {
     txtCodigoProducto.setText(tablaProductos.getValueAt(fila, 1).toString());
     txtDescripcionProd.setText(tablaProductos.getValueAt(fila, 2).toString());
     txtCantidadProducto.setText(tablaProductos.getValueAt(fila, 3).toString());
-    txtPrecioProd.setText(tablaProductos.getValueAt(fila, 7).toString());
-    bxProveedor.setSelectedItem(tablaProductos.getValueAt(fila, 8).toString());
-    txtPrecioCompra.setText(tablaProductos.getValueAt(fila, 9).toString());
+    txtPrecioProd.setText(tablaProductos.getValueAt(fila, 8).toString());
+    txtPrecioCompra.setText(tablaProductos.getValueAt(fila, 7).toString());
+    bxProveedor.setSelectedItem(tablaProductos.getValueAt(fila, 9).toString());
+   
 
     // 🟢 OBTENER EL ID del producto
     int id = Integer.parseInt(txtIdProd.getText());
@@ -3087,6 +3089,18 @@ public class Sistema extends javax.swing.JFrame {
         pro.setProveedor(bxProveedor.getSelectedItem().toString());
         pro.setStock(new BigDecimal(txtCantidadProducto.getText()));
         pro.setPrecio(new BigDecimal(txtPrecioProd.getText()));
+        
+        BigDecimal precioCompra = BigDecimal.ZERO;
+        
+        if (txtPrecioCompra.getText().isEmpty() ){
+        pro.setPrecioCompra (precioCompra);
+        }else{
+          
+           pro.setPrecioCompra(new BigDecimal(txtPrecioCompra.getText()));
+        }
+        
+        
+        
 
         // -----------------------------
         //   CATEGORIA (Item)
@@ -4402,6 +4416,7 @@ public class Sistema extends javax.swing.JFrame {
         txtCantidadProducto.setText("");
         txtPrecioProd.setText("");
         bxProveedor.setSelectedItem(null);
+        txtPrecioCompra.setText("");
 
     }
 
